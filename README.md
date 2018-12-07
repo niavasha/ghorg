@@ -1,8 +1,8 @@
-# ghorg
+# ghuser
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/gabrie30/ghorg)](https://goreportcard.com/report/github.com/gabrie30/ghorg) <a href="https://godoc.org/github.com/gabrie30/ghorg"><img src="https://godoc.org/github.com/gabrie30/ghorg?status.svg" alt="GoDoc"></a> [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/avelino/awesome-go) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Go Report Card](https://goreportcard.com/badge/github.com/niavasha/ghuser)](https://goreportcard.com/report/github.com/niavasha/ghuser) <a href="https://godoc.org/github.com/niavasha/ghuser"><img src="https://godoc.org/github.com/niavasha/ghuser?status.svg" alt="GoDoc"></a> [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/avelino/awesome-go) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-ghorg allows you to quickly clone all of an orgs repos into a single directory. This can be useful in many situations including
+ghuser allows you to quickly clone all of an orgs repos into a single directory. This can be useful in many situations including
 
 1. Searching your orgs codebase with ack, silver searcher, grep etc..
 2. Bash scripting
@@ -10,7 +10,7 @@ ghorg allows you to quickly clone all of an orgs repos into a single directory. 
 4. Onboarding new teammates
 5. Performing Audits
 
-> When running ghorg a second time, all local changes in your *_ghorg directory will be overwritten by whats on GitHub. If you are working out of this directory, make sure you rename it before running a second time otherwise all of you changes will be lost.
+> When running ghuser a second time, all local changes in your *_ghuser directory will be overwritten by whats on GitHub. If you are working out of this directory, make sure you rename it before running a second time otherwise all of you changes will be lost.
 
 ## Setup
 
@@ -25,18 +25,18 @@ $ brew upgrade git
 > required
 
 ```bash
-$ brew install gabrie30/utils/ghorg
-$ curl https://raw.githubusercontent.com/gabrie30/ghorg/master/.env-sample > $HOME/.ghorg
+$ brew install niavasha/utils/ghuser
+$ curl https://raw.githubusercontent.com/niavasha/ghuser/master/.env-sample > $HOME/.ghuser
 ```
 
 ### Golang
 
 ```bash
-$ go get -u github.com/gabrie30/ghorg
-$ cd $HOME/go/src/github.com/gabrie30/ghorg
+$ go get -u github.com/niavasha/ghuser
+$ cd $HOME/go/src/github.com/niavasha/ghuser
 $ cp .env-sample .env
 # update your .env, if needed
-# If GHORG_GITHUB_TOKEN is not set in .ghorg, defaults to keychain, see below
+# If ghuser_GITHUB_TOKEN is not set in .ghuser, defaults to keychain, see below
 $ make install
 $ go install
 ```
@@ -44,14 +44,14 @@ $ go install
 ## Use
 
 ```bash
-$ ghorg org-you-want-to-clone
+$ ghuser org-you-want-to-clone
 ```
 
-> ghorg defaults to master however, for gitflows you can run on develop by setting GHORG_BRANCH=develop or similar
+> ghuser defaults to master however, for gitflows you can run on develop by setting ghuser_BRANCH=develop or similar
 
 ## Configuration
 
-All configuration will be done in the .ghorg file. This file will be created from the [.env-sample](https://github.com/gabrie30/ghorg/blob/master/.env-sample) and copied into `~/.ghorg`. Make sure this file exists then configure to your needs.
+All configuration will be done in the .ghuser file. This file will be created from the [.env-sample](https://github.com/niavasha/ghuser/blob/master/.env-sample) and copied into `~/.ghuser`. Make sure this file exists then configure to your needs.
 
 ## Default GitHub Token Used
 
@@ -59,7 +59,7 @@ All configuration will be done in the .ghorg file. This file will be created fro
 $ security find-internet-password -s github.com  | grep "acct" | awk -F\" '{ print $4 }'
 ```
 
-> If running this does not return the correct key you will need to generate a token via GithHub and add it to your $HOME/.ghorg
+> If running this does not return the correct key you will need to generate a token via GithHub and add it to your $HOME/.ghuser
 
 > To view all other default environment variables see .env-sample
 
@@ -71,7 +71,7 @@ $ security find-internet-password -s github.com  | grep "acct" | awk -F\" '{ pri
 
 - Make sure your `$ git --version` is >= 2.19.0
 - You may need to increase your ulimits if cloning a large org
-- Other issues can most likely be resolved by adding a `.ghorg` to your users home directory and setting the necessary values defined in the `.env-sample`
+- Other issues can most likely be resolved by adding a `.ghuser` to your users home directory and setting the necessary values defined in the `.env-sample`
 
 ### Updating brew tap
-- [See Readme](https://github.com/gabrie30/homebrew-utils/blob/master/README.md)
+- [See Readme](https://github.com/niavasha/homebrew-utils/blob/master/README.md)
