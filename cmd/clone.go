@@ -1,4 +1,4 @@
-// Package cmd holds functions associated with cloning all of a given orgs repos
+// Package cmd holds functions associated with cloning all of a given users repos
 package cmd
 
 import (
@@ -10,15 +10,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gabrie30/ghorg/colorlog"
-	"github.com/gabrie30/ghorg/config"
 	"github.com/google/go-github/github"
+	"github.com/niavasha/ghuser/colorlog"
+	"github.com/niavasha/ghuser/config"
 	"golang.org/x/oauth2"
 )
 
 func getToken() string {
 	if len(config.GitHubToken) != 40 {
-		colorlog.PrintInfo("Note: GHORG_GITHUB_TOKEN not set in $HOME/.ghorg, defaulting to keychain")
+		colorlog.PrintInfo("Note: GHUSER_GITHUB_TOKEN not set in $HOME/.ghuser, defaulting to keychain")
 		fmt.Println()
 		cmd := `security find-internet-password -s github.com | grep "acct" | awk -F\" '{ print $4 }'`
 		out, err := exec.Command("bash", "-c", cmd).Output()
@@ -29,7 +29,7 @@ func getToken() string {
 		token := strings.TrimSuffix(string(out), "\n")
 
 		if len(token) != 40 {
-			log.Fatal("Could not find a GitHub token in keychain, create token, set GITHUB_TOKEN in your $HOME/.ghorg")
+			log.Fatal("Could not find a GitHub token in keychain, create token, set GITHUB_TOKEN in your $HOME/.ghuser")
 		}
 
 		return token
@@ -39,7 +39,7 @@ func getToken() string {
 }
 
 // TODO: Figure out how to use go channels for this
-func getAllOrgCloneUrls() ([]string, error) {
+func getAllUserCloneUrls() ([]string, error) {
 	ctx := context.Background()
 
 	ts := oauth2.StaticTokenSource(
@@ -48,7 +48,7 @@ func getAllOrgCloneUrls() ([]string, error) {
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	opt := &github.RepositoryListByOrgOptions{
+	opt := &github.RepositoryListByUserOptions{
 		Type:        "all",
 		ListOptions: github.ListOptions{PerPage: 100, Page: 0},
 	}
@@ -56,7 +56,7 @@ func getAllOrgCloneUrls() ([]string, error) {
 	// get all pages of results
 	var allRepos []*github.Repository
 	for {
-		repos, resp, err := client.Repositories.ListByOrg(context.Background(), os.Args[1], opt)
+		repos, resp, err := client.Repositories.ListByUser(context.Background(), os.Args[1], opt)
 		if err != nil {
 			return nil, err
 		}
@@ -69,7 +69,7 @@ func getAllOrgCloneUrls() ([]string, error) {
 	cloneUrls := []string{}
 
 	for _, repo := range allRepos {
-		if config.GhorgCloneProtocol == "https" {
+		if config.GhuserCloneProtocol == "https" {
 			cloneUrls = append(cloneUrls, *repo.CloneURL)
 		} else {
 			cloneUrls = append(cloneUrls, *repo.SSHURL)
@@ -80,7 +80,7 @@ func getAllOrgCloneUrls() ([]string, error) {
 }
 
 func createDirIfNotExist() {
-	if _, err := os.Stat(config.AbsolutePathToCloneTo + os.Args[1] + "_ghorg"); os.IsNotExist(err) {
+	if _, err := os.Stat(config.AbsolutePathToCloneTo + os.Args[1] + "_ghuser"); os.IsNotExist(err) {
 		err = os.MkdirAll(config.AbsolutePathToCloneTo, 0700)
 		if err != nil {
 			panic(err)
@@ -125,21 +125,21 @@ func printRemainingMessages(infoMessages []error, errors []error) {
 	}
 }
 
-// CloneAllReposByOrg clones all repos for a given org
-func CloneAllReposByOrg() {
+// CloneAllReposByUser clones all repos for a given user
+func CloneAllReposByUser() {
 	resc, errc, infoc := make(chan string), make(chan error), make(chan error)
 
 	createDirIfNotExist()
 
-	if config.GhorgBranch != "master" {
+	if config.GhuserBranch != "master" {
 		colorlog.PrintSubtleInfo("***********************************************************")
-		colorlog.PrintSubtleInfo("* Ghorg will be running on branch: " + config.GhorgBranch)
-		colorlog.PrintSubtleInfo("* To change back to master run $ export GHORG_BRANCH=master")
+		colorlog.PrintSubtleInfo("* Ghuser will be running on branch: " + config.GhuserBranch)
+		colorlog.PrintSubtleInfo("* To change back to master run $ export GHUSER_BRANCH=master")
 		colorlog.PrintSubtleInfo("***********************************************************")
 		fmt.Println()
 	}
 
-	cloneTargets, err := getAllOrgCloneUrls()
+	cloneTargets, err := getAllUserCloneUrls()
 
 	if err != nil {
 		colorlog.PrintError(err)
@@ -152,7 +152,7 @@ func CloneAllReposByOrg() {
 		appName := getAppNameFromURL(target)
 
 		go func(repoUrl string, branch string) {
-			repoDir := config.AbsolutePathToCloneTo + os.Args[1] + "_ghorg" + "/" + appName
+			repoDir := config.AbsolutePathToCloneTo + os.Args[1] + "_ghuser" + "/" + appName
 
 			if repoExistsLocally(repoDir) == true {
 
@@ -197,7 +197,7 @@ func CloneAllReposByOrg() {
 			}
 
 			resc <- repoUrl
-		}(target, config.GhorgBranch)
+		}(target, config.GhuserBranch)
 	}
 
 	errors := []error{}
@@ -216,10 +216,10 @@ func CloneAllReposByOrg() {
 
 	printRemainingMessages(infoMessages, errors)
 
-	colorlog.PrintSuccess(fmt.Sprintf("Finished! %s%s_ghorg", config.AbsolutePathToCloneTo, os.Args[1]))
+	colorlog.PrintSuccess(fmt.Sprintf("Finished! %s%s_ghuser", config.AbsolutePathToCloneTo, os.Args[1]))
 }
 
 // TODO: Clone via http or ssh flag
 
 // Could clone all repos on a user
-// orgs, _, err := client.Organizations.List(context.Background(), "willnorris", nil)
+// users, _, err := client.Useranizations.List(context.Background(), "willnorris", nil)

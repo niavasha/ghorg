@@ -1,8 +1,8 @@
 install:
-		touch ~/.ghorg
-		cp .env ~/.ghorg
+		touch ~/.ghuser
+		cp .env ~/.ghuser
 homebrew:
-		touch ${HOME}/.ghorg
-		cp .env-sample ${HOME}/.ghorg
+		touch ${HOME}/.ghuser
+		cp .env-sample ${HOME}/.ghuser
 uninstall:
-		rm ~/.ghorg
+		rm ~/.ghuser

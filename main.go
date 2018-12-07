@@ -5,16 +5,16 @@ import (
 	"log"
 	"os"
 
-	"github.com/gabrie30/ghorg/cmd"
-	"github.com/gabrie30/ghorg/colorlog"
-	"github.com/gabrie30/ghorg/config"
 	"github.com/joho/godotenv"
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/niavasha/ghuser/cmd"
+	"github.com/niavasha/ghuser/colorlog"
+	"github.com/niavasha/ghuser/config"
 )
 
 func init() {
 	if len(os.Args) <= 1 {
-		log.Fatal("You must provide an org to clone from")
+		log.Fatal("You must provide an user to clone from")
 	}
 
 	home, err := homedir.Dir()
@@ -22,27 +22,27 @@ func init() {
 		log.Fatal("Error trying to find users home directory")
 	}
 
-	err = godotenv.Load(home + "/.ghorg")
+	err = godotenv.Load(home + "/.ghuser")
 	if err != nil {
 		fmt.Println()
-		colorlog.PrintSubtleInfo("Could not find a $HOME/.ghorg proceeding with defaults")
+		colorlog.PrintSubtleInfo("Could not find a $HOME/.ghuser proceeding with defaults")
 	}
 
-	config.GitHubToken = os.Getenv("GHORG_GITHUB_TOKEN")
-	config.AbsolutePathToCloneTo = os.Getenv("GHORG_ABSOLUTE_PATH_TO_CLONE_TO")
-	config.GhorgBranch = os.Getenv("GHORG_BRANCH")
-	config.GhorgCloneProtocol = os.Getenv("GHORG_CLONE_PROTOCOL")
+	config.GitHubToken = os.Getenv("ghuser_GITHUB_TOKEN")
+	config.AbsolutePathToCloneTo = os.Getenv("ghuser_ABSOLUTE_PATH_TO_CLONE_TO")
+	config.GhuserBranch = os.Getenv("ghuser_BRANCH")
+	config.GhuserCloneProtocol = os.Getenv("ghuser_CLONE_PROTOCOL")
 
-	if config.GhorgBranch == "" {
-		config.GhorgBranch = "master"
+	if config.GhuserBranch == "" {
+		config.GhuserBranch = "master"
 	}
 
 	if config.AbsolutePathToCloneTo == "" {
 		config.AbsolutePathToCloneTo = home + "/Desktop/"
 	}
 
-	if config.GhorgCloneProtocol == "" {
-		config.GhorgCloneProtocol = "https"
+	if config.GhuserCloneProtocol == "" {
+		config.GhuserCloneProtocol = "https"
 	}
 
 	withTrailingSlash := ensureTrailingSlash(config.AbsolutePathToCloneTo)
@@ -60,13 +60,13 @@ func ensureTrailingSlash(path string) string {
 func asciiTime() {
 	colorlog.PrintInfo(
 		`
- +-+-+-+-+ +-+-+ +-+-+-+-+-+
- |T|I|M|E| |T|O| |G|H|O|R|G|
- +-+-+-+-+ +-+-+ +-+-+-+-+-+
+ +-+-+-+-+ +-+-+ +-+-+-+-+-+-+
+ |T|I|M|E| |T|O| |G|H|U|S|E|R|
+ +-+-+-+-+ +-+-+ +-+-+-+-+-+-+
 `)
 }
 
 func main() {
 	asciiTime()
-	cmd.CloneAllReposByOrg()
+	cmd.CloneAllReposByUser()
 }

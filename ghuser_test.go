@@ -3,11 +3,11 @@ package main
 import (
 	"testing"
 
-	"github.com/gabrie30/ghorg/config"
+	"github.com/niavasha/ghuser/config"
 )
 
 func TestDefaultBranch(t *testing.T) {
-	branch := config.GhorgBranch
+	branch := config.GhuserBranch
 	if branch != "master" {
 		t.Errorf("Default branch should be master")
 	}
