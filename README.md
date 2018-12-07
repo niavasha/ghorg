@@ -1,6 +1,6 @@
 # ghuser
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/niavasha/ghuser)](https://goreportcard.com/report/github.com/niavasha/ghuser) <a href="https://godoc.user/github.com/niavasha/ghuser"><img src="https://godoc.user/github.com/niavasha/ghuser?status.svg" alt="GoDoc"></a> [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/avelino/awesome-go) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.user/licenses/Apache-2.0)
+[![Go Report Card](https://goreportcard.com/badge/github.com/niavasha/ghuser)](https://goreportcard.com/report/github.com/niavasha/ghuser) <a href="https://godoc.org/github.com/niavasha/ghuser"><img src="https://godoc.org/github.com/niavasha/ghuser?status.svg" alt="GoDoc"></a> [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/avelino/awesome-go) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ghuser allows you to quickly clone all of an users repos into a single directory. This can be useful in many situations including
 
